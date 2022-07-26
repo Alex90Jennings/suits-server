@@ -2,27 +2,23 @@ import User from '../domain/user.js'
 import { sendDataResponse, sendMessageResponse } from '../utils/responses.js'
 
 export const createUser = async (req, res) => {
-    const userToCreate = await User.fromJson(req.body)
+    const { username } = req.body
+    console.log("req body: ", req.body)
+    const userToCreate = await User.fromJSON(req.body)
+    console.log(userToCreate)
 
-    try {
-        const existingUser = await User.findById(userToCreate.email)
+    const createdUser = await userToCreate.save()
 
-        if (existingUser) return 'username already in use'
+    return sendDataResponse(res, 200, {...createdUser.toJSON()})
 
-        const createdUser = await userToCreate.save()
-
-        return sendDataResponse(res, 200, {...createdUser.toJson()})
-    } catch (e) {
-        console.e('something went wront', e.message)
-        return sendMessageResponse(res, 500, 'unable to create new user')
-    }
 }
 
 export const getUserById = async (req, res) => {
-    const { id: id } = req.query
     const userToFindId = Number(req.params.id)
 
-    if (id) foundUser = await User.findById(userToFindId)
+    const foundUser = await User.findById(userToFindId)
 
-    return sendDataResponse(res, 200, { user: foundUser })
+    if(!foundUser) return sendMessageResponse(res, 500, 'unable to find user')
+
+    return sendDataResponse(res, 200, { foundUser })
 }
