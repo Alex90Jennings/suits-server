@@ -1,20 +1,20 @@
 import dbClient from '../utils/dbClient.js'
 
 export default class User {
-    static fromDb(user) { return new User( user.id, user.username, user.Table, user.isHost ) }
+    static fromDb(user) { return new User( user.id, user.username, user.hostTable, user.table ) }
 
     static async fromJSON(json) {
         const { username } = json
 
-        return new User ( null, username, undefined, false )
+        return new User ( null, username, undefined, undefined )
     }
 
 
-    constructor( id, username, Table, isHost ) {
+    constructor( id, username, hostTable, table ) {
         this.id = id,
         this.username = username
-        this.Table = Table
-        this.isHost = isHost
+        this.hostTable = hostTable
+        this.table = table
     }
 
     toJSON() {
@@ -22,8 +22,8 @@ export default class User {
             user: {
                 id: this.id,
                 username: this.username,
-                Table: this.Table,
-                isHost: this.isHost
+                hostTable: this.hostTable,
+                table: this.table
             }
         }
     }
@@ -33,7 +33,8 @@ export default class User {
          const createdUser = await dbClient.user.create({
             data: { 
                 username: this.username,
-                Table: this.Table,
+                hostTable: this.hostTable,
+                table: this.table,
                 isHost: this.isHost
             }
         })
