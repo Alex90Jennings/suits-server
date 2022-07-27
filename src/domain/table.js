@@ -45,7 +45,7 @@ export default class Table {
     }
 
     static async findById(id) {
-        return User._findByUnique('id', id)
+        return Table._findByUnique('id', id)
     }
 
     static async _findByUnique(key, value) {
@@ -54,7 +54,7 @@ export default class Table {
         })
 
         if (foundTable) {
-        return User.fromDb(foundTable)
+        return Table.fromDb(foundTable)
         }
 
         return null

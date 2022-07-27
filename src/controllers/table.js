@@ -13,7 +13,7 @@ export const createTable = async (req, res) => {
 export const getTableById = async (req, res) => {
     const tableToFindId = Number(req.params.id)
 
-    const foundTable = await User.findById(tableToFindId)
+    const foundTable = await Table.findById(tableToFindId)
 
     if(!foundTable) return sendMessageResponse(res, 500, 'unable to find user')
 
