@@ -56,6 +56,20 @@ export default class User {
     return null
   }
 
+  static async findManyByTable(tableId) {
+    return User._findMany({ key: 'tableId', value: tableId })
+  }
+
+  static async _findMany({ key, value }) {
+    const query = {
+      where: { [key]: value },
+    }
+
+    const foundUsers = await dbClient.user.findMany(query)
+
+    return foundUsers.map((user) => User.fromDb(user))
+  }
+
   async update() {
     console.log(this.id)
     const updatedUser = await dbClient.user.update({

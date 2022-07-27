@@ -21,6 +21,16 @@ export const getUserById = async (req, res) => {
     return sendDataResponse(res, 200, { foundUser })
 }
 
+export const getAllUserByTableId = async (req, res) => {
+    const tableId = Number(req.params.id)
+
+    const foundUsers = await User.findManyByTable(tableId)
+
+    if(!foundUsers) return sendMessageResponse(res, 500, 'unable to find users')
+
+    return sendDataResponse(res, 200, { foundUsers })
+}
+
 export const updateById = async (req, res) => {
     const userToFindId = Number(req.params.id)
     let {tableId: tableId} = req.body
