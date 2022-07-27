@@ -9,6 +9,19 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique
+  id        Int      @id @default(autoincrement())
+  username  String
+  TableId   Int?
+  Table     Table?   @relation(fields: [TableId], references: [id])
+  isHost    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Table {
+  id        Int      @id @default(autoincrement())
+  Users     User[]
+  isInGame  Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
