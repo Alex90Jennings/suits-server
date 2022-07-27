@@ -11,8 +11,8 @@ datasource db {
 model User {
   id        Int      @id @default(autoincrement())
   username  String
-  TableId   Int?
-  Table     Table?   @relation(fields: [TableId], references: [id])
+  tableId   Int?
+  table     Table?   @relation(fields: [tableId], references: [id])
   isHost    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -20,7 +20,7 @@ model User {
 
 model Table {
   id        Int      @id @default(autoincrement())
-  Users     User[]
+  users     User[]
   isInGame  Boolean
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
