@@ -29,13 +29,11 @@ export default class User {
     }
 
     async save() {
-        console.log(this.username)
          const createdUser = await dbClient.user.create({
             data: { 
                 username: this.username,
                 hostTable: this.hostTable,
                 table: this.table,
-                isHost: this.isHost
             }
         })
 
@@ -43,7 +41,6 @@ export default class User {
     }
 
     static async findById(id) {
-        console.log("inside findById")
         return User._findByUnique('id', id)
   }
 
@@ -53,7 +50,6 @@ export default class User {
     })
 
     if (foundUser) {
-        console.log("found user: ", foundUser)
       return User.fromDb(foundUser)
     }
 

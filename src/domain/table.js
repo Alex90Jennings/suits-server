@@ -26,7 +26,6 @@ export default class Table {
     }
 
     async save() {
-        console.log("this.Users: ", this.Users)
          const createdTable = await dbClient.table.create({
             data: { 
                 users: {
@@ -41,7 +40,6 @@ export default class Table {
     }
 
     static async findById(id) {
-        console.log("inside findById")
         return User._findByUnique('id', id)
     }
 
@@ -51,7 +49,6 @@ export default class Table {
         })
 
         if (foundTable) {
-            console.log("found user: ", foundTable)
         return User.fromDb(foundTable)
         }
 
