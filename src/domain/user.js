@@ -55,4 +55,20 @@ export default class User {
 
     return null
   }
+
+  async update() {
+    console.log(this.id)
+    const updatedUser = await dbClient.user.update({
+      where: {
+        id: Number(this.id)
+      },
+      data: {
+        username: this.username,
+        tableId: this.tableId,
+        hostId: this.hostId
+      }
+    })
+
+    return User.fromDb(updatedUser)
+  }
 }
