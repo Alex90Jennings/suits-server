@@ -1,17 +1,18 @@
 import dbClient from '../utils/dbClient.js'
 
 export default class Table {
-    static fromDb(table) { return new Table( table.id, table.users, table.isInGame ) }
+    static fromDb(table) { return new Table( table.id, table.users, table.host, table.isInGame ) }
 
     static async fromJSON(json) {
         const { Users } = json
 
-        return new Table ( null, Users, false )
+        return new Table ( null, Users, Users, false )
     }
 
-    constructor( id, Users, isInGame ) {
+    constructor( id, Users, host, isInGame ) {
         this.id = id,
         this.Users = Users
+        this.host = host
         this.isInGame = isInGame
     }
 
@@ -20,6 +21,7 @@ export default class Table {
             table: {
                 id: this.id,
                 Users: this.Users,
+                host: this.host,
                 isInGame: this.isInGame
             }
         }
@@ -29,6 +31,9 @@ export default class Table {
          const createdTable = await dbClient.table.create({
             data: { 
                 users: {
+                    connect: { id: this.Users[0].id }
+                },
+                host: {
                     connect: { id: this.Users[0].id }
                 },
                 isInGame: this.isInGame
