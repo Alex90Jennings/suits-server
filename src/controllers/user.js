@@ -35,7 +35,6 @@ export const updateById = async (req, res) => {
     const userToFindId = Number(req.params.id)
     let {tableId: tableId} = req.body
     tableId = Number(tableId)
-    console.log(tableId)
 
     const userToUpdate = await User.findById(userToFindId)
     const foundTable = await Table.findById(tableId)
@@ -50,7 +49,6 @@ export const updateById = async (req, res) => {
     }
 
     userToUpdate.tableId = tableId
-    console.log(foundTable)
     const updatedUser = await userToUpdate.update()
 
     return sendDataResponse(res, 200,{user: {...updatedUser, tableId: tableId}})

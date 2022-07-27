@@ -71,7 +71,6 @@ export default class User {
   }
 
   async update() {
-    console.log(this.id)
     const updatedUser = await dbClient.user.update({
       where: {
         id: Number(this.id)
