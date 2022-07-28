@@ -30,18 +30,18 @@ model Table {
   updatedAt DateTime @updatedAt
 }
 
-model CardDeck {
-  id    Int    @id @default(autoincrement())
-  cards Card[]
-  round Round?
-}
-
 model Round {
   id         Int      @id @default(autoincrement())
   cardDeck   CardDeck @relation(fields: [cardDeckId], references: [id])
   cardDeckId Int      @unique
   table      Table    @relation(fields: [tableId], references: [id])
   tableId    Int
+}
+
+model CardDeck {
+  id    Int    @id @default(autoincrement())
+  cards Card[]
+  round Round?
 }
 
 model Card {
