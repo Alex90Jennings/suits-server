@@ -15,6 +15,7 @@ model User {
   table       Table?   @relation(name: "players", fields: [tableId], references: [id])
   hostTableId Int?
   hostTable   Table?   @relation(name: "host", fields: [hostTableId], references: [id])
+  cards       Card[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -23,7 +24,30 @@ model Table {
   id        Int      @id @default(autoincrement())
   users     User[]   @relation("players")
   host      User[]   @relation("host")
+  rounds    Round[]
   isInGame  Boolean
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model CardDeck {
+  id    Int    @id @default(autoincrement())
+  cards Card[]
+  round Round?
+}
+
+model Round {
+  id         Int      @id @default(autoincrement())
+  cardDeck   CardDeck @relation(fields: [cardDeckId], references: [id])
+  cardDeckId Int      @unique
+  table      Table    @relation(fields: [tableId], references: [id])
+  tableId    Int
+}
+
+model Card {
+  id         Int      @id @default(autoincrement())
+  cardDeck   CardDeck @relation(fields: [cardDeckId], references: [id])
+  cardDeckId Int
+  user       User?    @relation(fields: [userId], references: [id])
+  userId     Int?
 }
