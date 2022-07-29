@@ -1,7 +1,7 @@
 import PlayerState from '../domain/playerState.js'
 import { sendDataResponse, sendMessageResponse } from '../utils/responses.js'
 
-export const createPlayerState = async (req, res) => {
+export const createPlayerStates = async (req, res) => {
     const userId = Number(req.params.id)
     const playerStateToCreate = await PlayerState.fromJSON(req.body, userId)
 
@@ -10,12 +10,12 @@ export const createPlayerState = async (req, res) => {
     return sendDataResponse(res, 200, {...createdPlayerState.toJSON()})
 }
 
-export const getPlayerStateByUserId = async (req, res) => {
+export const getPlayerStatesByUserId = async (req, res) => {
     const userToFindId = Number(req.params.id)
 
-    const foundPlayerState = await PlayerState.findById(userToFindId)
+    const foundPlayerStates = await PlayerState.findManyByUser(userToFindId)
 
-    if(!foundPlayerState) return sendMessageResponse(res, 500, 'unable to find user')
+    if(!foundPlayerStates) return sendMessageResponse(res, 500, 'unable to find user')
 
-    return sendDataResponse(res, 200, { foundPlayerState })
+    return sendDataResponse(res, 200, { foundPlayerStates })
 }

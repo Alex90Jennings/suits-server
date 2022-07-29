@@ -69,4 +69,18 @@ export default class PlayerState {
 
         return null
     }
+
+    static async findManyByUser(userId) {
+        return PlayerState._findMany({ key: 'userId', value: userId })
+    }
+    
+    static async _findMany({ key, value }) {
+        const query = {
+          where: { [key]: value },
+        }
+    
+        const foundPlayerStates = await dbClient.playerState.findMany(query)
+    
+        return foundPlayerStates.map((playerState) => PlayerState.fromDb(playerState))
+    }
 }
