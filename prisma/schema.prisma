@@ -8,46 +8,52 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-model User {
-  id          Int      @id @default(autoincrement())
-  username    String
-  tableId     Int?
-  table       Table?   @relation(name: "players", fields: [tableId], references: [id])
-  hostTableId Int?
-  hostTable   Table?   @relation(name: "host", fields: [hostTableId], references: [id])
-  cards       Card[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Table {
+model PlayerState {
   id        Int      @id @default(autoincrement())
-  users     User[]   @relation("players")
-  host      User[]   @relation("host")
-  rounds    Round[]
-  isInGame  Boolean
+  user      User?
+  table     Table    @relation(fields: [tableId], references: [id])
+  tableId   Int
+  score     Int      @default(0)
+  bet       Int      @default(0)
+  round     Round    @relation(fields: [roundId], references: [id])
+  roundId   Int
+  hand      String?
+  handsWon  Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+model User {
+  id            Int         @id @default(autoincrement())
+  username      String
+  isHost        Boolean     @default(false)
+  tableId       Int?
+  score         Int         @default(0)
+  table         Table?      @relation(fields: [tableId], references: [id])
+  playerState   PlayerState @relation(fields: [playerStateId], references: [id])
+  playerStateId Int         @unique
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Table {
+  id          Int           @id @default(autoincrement())
+  rounds      Round[]
+  users       User[]
+  isInGame    Boolean       @default(false)
+  playerState PlayerState[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
 model Round {
-  id         Int      @id @default(autoincrement())
-  cardDeck   CardDeck @relation(fields: [cardDeckId], references: [id])
-  cardDeckId Int      @unique
-  table      Table    @relation(fields: [tableId], references: [id])
-  tableId    Int
-}
-
-model CardDeck {
-  id    Int    @id @default(autoincrement())
-  cards Card[]
-  round Round?
-}
-
-model Card {
-  id         Int      @id @default(autoincrement())
-  cardDeck   CardDeck @relation(fields: [cardDeckId], references: [id])
-  cardDeckId Int
-  user       User?    @relation(fields: [userId], references: [id])
-  userId     Int?
+  id           Int           @id @default(autoincrement())
+  numberCards  Int           @default(0)
+  currentTrick String?
+  table        Table         @relation(fields: [tableId], references: [id])
+  tableId      Int
+  trumps       String?
+  PlayerState  PlayerState[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }

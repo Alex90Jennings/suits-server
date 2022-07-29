@@ -8,7 +8,6 @@ export const createUser = async (req, res) => {
     const createdUser = await userToCreate.save()
 
     return sendDataResponse(res, 200, {...createdUser.toJSON()})
-
 }
 
 export const getUserById = async (req, res) => {
