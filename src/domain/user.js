@@ -1,7 +1,7 @@
 import dbClient from '../utils/dbClient.js'
 
 export default class User {
-    static fromDb(user) { return new User( user.id, user.username, user.isHost, user.score, user.tableId, user.playerStateId ) }
+    static fromDb(user) { return new User( user.id, user.username, user.isHost, user.score, user.tableId, user.playerStates ) }
 
     static async fromJSON(json) {
         const { username } = json
@@ -10,13 +10,13 @@ export default class User {
     }
 
 
-    constructor( id, username, isHost, score, tableId, playerStateId ) {
+    constructor( id, username, isHost, score, tableId, playerStates ) {
         this.id = id,
         this.username = username
         this.isHost = isHost
         this.score = score
         this.tableId = tableId
-        this.playerStateId = playerStateId
+        this.playerStates = playerStates
     }
 
     toJSON() {
@@ -41,7 +41,7 @@ export default class User {
                 score: this.score,
                 hostTable: this.hostTable,
                 tableId: this.tableId,
-                playerStateId: this.playerStateId
+                playerStates: this.playerStates
             }
         })
 
@@ -84,8 +84,11 @@ export default class User {
       },
       data: {
         username: this.username,
+        isHost: this.isHost,
+        score: this.score,
+        hostTable: this.hostTable,
         tableId: this.tableId,
-        hostId: this.hostId
+        playerStates: this.playerStates
       }
     })
     return User.fromDb(updatedUser)

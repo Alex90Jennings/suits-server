@@ -53,8 +53,6 @@ export default class Round {
             where: { [key]: value }
         })
 
-        console.log(foundRound)
-
         if (foundRound) {
             return Round.fromDb(foundRound)
         }
