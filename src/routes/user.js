@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
 import { createUser, getUserById, updateById, getAllUserByTableId } from '../controllers/user.js'
-import { createPlayerState, getPlayerStateByUserId } from '../controllers/playerState'
+import { createPlayerState, getPlayerStateByUserId } from '../controllers/playerState.js'
 
 const router = Router()
 

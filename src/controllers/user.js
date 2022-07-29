@@ -1,5 +1,6 @@
 import User from '../domain/user.js'
 import Table from '../domain/table.js'
+import PlayerState from '../domain/playerState.js'
 import { sendDataResponse, sendMessageResponse } from '../utils/responses.js'
 
 export const createUser = async (req, res) => {
@@ -32,23 +33,31 @@ export const getAllUserByTableId = async (req, res) => {
 
 export const updateById = async (req, res) => {
     const userToFindId = Number(req.params.id)
-    let {tableId: tableId} = req.body
+    let {tableId: tableId, isHost: isHost, score: score, playerStateId: playerStateId} = req.body
     tableId = Number(tableId)
+    playerStateId = Number(playerStateId)
+    
+    console.log(playerStateId)
 
     const userToUpdate = await User.findById(userToFindId)
     const foundTable = await Table.findById(tableId)
+    const foundPlayerState = await PlayerState.findById(playerStateId)
 
 
     if (!userToUpdate) {
-        return sendDataResponse(res, 400, { message: 'User does not exist' })
+        return sendMessageResponse(res, 400, { message: 'User does not exist' })
     }
 
     if (!foundTable) {
-        return sendDataResponse(res, 400, { message: 'Table does not exist' })
+        return sendMessageResponse(res, 400, { message: 'Table does not exist' })
+    }
+
+    if (!foundPlayerState) {
+        return sendMessageResponse(res, 400, { message: 'Player state does not exist' })
     }
 
     userToUpdate.tableId = tableId
     const updatedUser = await userToUpdate.update()
 
-    return sendDataResponse(res, 200,{user: {...updatedUser, tableId: tableId}})
+    return sendDataResponse(res, 200,{user: {...updatedUser, tableId: tableId, isHost: isHost, score: score, playerStateId: playerStateId}})
 }

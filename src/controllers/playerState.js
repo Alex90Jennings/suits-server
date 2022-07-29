@@ -3,7 +3,7 @@ import { sendDataResponse, sendMessageResponse } from '../utils/responses.js'
 
 export const createPlayerState = async (req, res) => {
     const userId = Number(req.params.id)
-    const playerStateToCreate = await PlayerState.fromJSON(req.body)
+    const playerStateToCreate = await PlayerState.fromJSON(req.body, userId)
 
     const createdPlayerState = await playerStateToCreate.save()
 

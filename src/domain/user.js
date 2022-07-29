@@ -1,20 +1,22 @@
 import dbClient from '../utils/dbClient.js'
 
 export default class User {
-    static fromDb(user) { return new User( user.id, user.username, user.hostTable, user.table ) }
+    static fromDb(user) { return new User( user.id, user.username, user.isHost, user.score, user.tableId, user.playerStateId ) }
 
     static async fromJSON(json) {
         const { username } = json
 
-        return new User ( null, username, undefined, undefined )
+        return new User ( null, username, false, 0, undefined, undefined )
     }
 
 
-    constructor( id, username, hostTable, table ) {
+    constructor( id, username, isHost, score, tableId, playerStateId ) {
         this.id = id,
         this.username = username
-        this.hostTable = hostTable
-        this.table = table
+        this.isHost = isHost
+        this.score = score
+        this.tableId = tableId
+        this.playerStateId = playerStateId
     }
 
     toJSON() {
@@ -22,8 +24,11 @@ export default class User {
             user: {
                 id: this.id,
                 username: this.username,
+                isHost: this.isHost,
+                score: this.score,
                 hostTable: this.hostTable,
-                table: this.table
+                tableId: this.tableId,
+                playerStateId: this.playerStateId
             }
         }
     }
@@ -32,8 +37,11 @@ export default class User {
          const createdUser = await dbClient.user.create({
             data: { 
                 username: this.username,
+                isHost: this.isHost,
+                score: this.score,
                 hostTable: this.hostTable,
-                table: this.table,
+                tableId: this.tableId,
+                playerStateId: this.playerStateId
             }
         })
 
@@ -52,7 +60,6 @@ export default class User {
     if (foundUser) {
       return User.fromDb(foundUser)
     }
-
     return null
   }
 
@@ -81,7 +88,6 @@ export default class User {
         hostId: this.hostId
       }
     })
-
     return User.fromDb(updatedUser)
   }
 }

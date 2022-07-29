@@ -1,28 +1,30 @@
 import dbClient from '../utils/dbClient.js'
 
 export default class Table {
-    static fromDb(table) { return new Table( table.id, table.users, table.host, table.isInGame ) }
+    static fromDb(table) { return new Table( table.id, table.rounds, table.users, table.isInGame, table.playerState ) }
 
     static async fromJSON(json) {
-        const { Users } = json
+        const { users } = json
 
-        return new Table ( null, Users, Users, false )
+        return new Table ( null, undefined, users, false, undefined )
     }
 
-    constructor( id, Users, host, isInGame ) {
+    constructor( id, rounds, users, isInGame, playerState ) {
         this.id = id,
-        this.Users = Users
-        this.host = host
+        this.rounds = rounds
+        this.users = users
         this.isInGame = isInGame
+        this.playerState = playerState
     }
 
     toJSON() {
         return {
             table: {
                 id: this.id,
-                Users: this.Users,
-                host: this.host,
-                isInGame: this.isInGame
+                rounds: this.rounds,
+                users: this.users,
+                isInGame: this.isInGame,
+                playerState: this.playerState
             }
         }
     }
@@ -30,13 +32,12 @@ export default class Table {
     async save() {
          const createdTable = await dbClient.table.create({
             data: { 
+                rounds: this.rounds,
                 users: {
-                    connect: { id: this.Users[0].id }
+                    connect: { id: this.users[0].id }
                 },
-                host: {
-                    connect: { id: this.Users[0].id }
-                },
-                isInGame: this.isInGame
+                isInGame: this.isInGame,
+                playerState: this.playerState
             },
             include: { users: true },
         })

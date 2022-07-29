@@ -10,40 +10,37 @@ datasource db {
 
 model PlayerState {
   id        Int      @id @default(autoincrement())
-  user      User?
-  table     Table    @relation(fields: [tableId], references: [id])
-  tableId   Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
   score     Int      @default(0)
   bet       Int      @default(0)
-  round     Round    @relation(fields: [roundId], references: [id])
-  roundId   Int
+  round     Round?   @relation(fields: [roundId], references: [id])
+  roundId   Int?
   hand      String?
   handsWon  Int      @default(0)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model User {
-  id            Int         @id @default(autoincrement())
-  username      String
-  isHost        Boolean     @default(false)
-  tableId       Int?
-  score         Int         @default(0)
-  table         Table?      @relation(fields: [tableId], references: [id])
-  playerState   PlayerState @relation(fields: [playerStateId], references: [id])
-  playerStateId Int         @unique
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id          Int           @id @default(autoincrement())
+  username    String
+  isHost      Boolean       @default(false)
+  score       Int           @default(0)
+  table       Table?        @relation(fields: [tableId], references: [id])
+  tableId     Int?
+  playerState PlayerState[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
 }
 
 model Table {
-  id          Int           @id @default(autoincrement())
-  rounds      Round[]
-  users       User[]
-  isInGame    Boolean       @default(false)
-  playerState PlayerState[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id        Int      @id @default(autoincrement())
+  rounds    Round[]
+  users     User[]
+  isInGame  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Round {
@@ -53,7 +50,7 @@ model Round {
   table        Table         @relation(fields: [tableId], references: [id])
   tableId      Int
   trumps       String?
-  PlayerState  PlayerState[]
+  playerStates PlayerState[]
   createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  updatedAt    DateTime      @default(now()) @updatedAt
 }
