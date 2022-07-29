@@ -3,6 +3,7 @@ import cors from 'cors'
 import userRouter from './routes/user.js'
 import tableRouter from './routes/table.js'
 import roundRouter from './routes/round.js'
+import playerStateRouter from './routes/playerState.js'
 
 
 const server = express()
@@ -15,6 +16,8 @@ server.use(express.json())
 server.use('/user', userRouter)
 server.use('/table', tableRouter)
 server.use('/round', roundRouter)
+server.use('/playerState', playerStateRouter)
+
 
 server.use('/status', (req, res) => {
   res.json({status: 'ok'})
