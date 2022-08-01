@@ -36,8 +36,6 @@ export const updateById = async (req, res) => {
     let {tableId: tableId, isHost: isHost, score: score, playerStateId: playerStateId} = req.body
     tableId = Number(tableId)
     playerStateId = Number(playerStateId)
-    
-    console.log(playerStateId)
 
     const userToUpdate = await User.findById(userToFindId)
     const foundTable = await Table.findById(tableId)

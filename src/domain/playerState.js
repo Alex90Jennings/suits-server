@@ -1,21 +1,22 @@
 import dbClient from '../utils/dbClient.js'
 
 export default class PlayerState {
-    static fromDb(playerState) { return new PlayerState( playerState.id, playerState.user, playerState.score, playerState.bet, playerState.round, playerState.hand, playerState.handsWon ) }
+    static fromDb(playerState) { return new PlayerState( playerState.id, playerState.user, playerState.score, playerState.bet, playerState.round, playerState.hand, playerState.playedCard, playerState.handsWon ) }
 
     static async fromJSON(json, userId) {
         const { roundId } = json
 
-        return new PlayerState ( null, userId, 0, 0, roundId, undefined, 0 )
+        return new PlayerState ( null, userId, 0, 0, roundId, undefined, undefined, 0 )
     }
 
-    constructor( id, user, score, bet, round, hand, handsWon ) {
+    constructor( id, user, score, bet, round, hand, playedCard, handsWon ) {
         this.id = id,
         this.user = user
         this.score = score
         this.bet = bet
         this.round = round
         this.hand = hand
+        this.playedCard = playedCard
         this.handsWon = handsWon
     }
 
@@ -28,6 +29,7 @@ export default class PlayerState {
                 bet: this.bet,
                 round: this.round,
                 hand: this.hand,
+                playedCard: this.playedCard,
                 handsWon: this.handsWon
             }
         }
@@ -45,6 +47,7 @@ export default class PlayerState {
                     connect: { id: this.round }
                 },
                 hand: this.hand,
+                playedCard: this.playedCard,
                 handsWon: this.handsWon
             },
             include: { user: true, round: true },
@@ -60,8 +63,6 @@ export default class PlayerState {
         const foundPlayerState = await dbClient.playerState.findUnique({
             where: { [key]: value }
         })
-
-        console.log(foundPlayerState)
 
         if (foundPlayerState) {
             return PlayerState.fromDb(foundPlayerState)
