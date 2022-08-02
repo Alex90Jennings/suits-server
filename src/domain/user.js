@@ -26,7 +26,7 @@ export default class User {
                 isHost: this.isHost,
                 hostTable: this.hostTable,
                 tableId: this.tableId,
-                playerStateId: this.playerStateId
+                playerStates: this.playerStates
             }
         }
     }
@@ -38,8 +38,13 @@ export default class User {
                 isHost: this.isHost,
                 hostTable: this.hostTable,
                 tableId: this.tableId,
-                playerStates: this.playerStates
-            }
+                playerStates: {
+                  create: { handsWon: 0 }
+                },
+            },
+            include: {
+              playerStates: true
+            },
         })
 
         return User.fromDb(createdUser)
@@ -51,7 +56,10 @@ export default class User {
 
   static async _findByUnique(key, value) {
     const foundUser = await dbClient.user.findUnique({
-      where: { [key]: value }
+      where: { [key]: value },
+      include: {
+        playerStates: true
+      },
     })
 
     if (foundUser) {
@@ -67,6 +75,9 @@ export default class User {
   static async _findMany({ key, value }) {
     const query = {
       where: { [key]: value },
+      include: {
+        playerStates: true
+      },
     }
 
     const foundUsers = await dbClient.user.findMany(query)
