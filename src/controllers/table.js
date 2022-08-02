@@ -31,5 +31,5 @@ export const updateTableById = async (req, res) => {
     tableToUpdate.isInGame = isInGame
     const updatedTable = await tableToUpdate.update()
 
-    return sendDataResponse(res, 200, { ...updatedTable, isInGame: isInGame })
+    return sendDataResponse(res, 200,{table: { ...updatedTable, isInGame: isInGame }})
 }

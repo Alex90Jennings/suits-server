@@ -1,7 +1,7 @@
 import dbClient from '../utils/dbClient.js'
 
 export default class Table {
-    static fromDb(table) { return new Table( table.id, table.rounds, table.users, table.isInGame, table.playerState ) }
+    static fromDb(table) { return new Table( table.id, table.rounds, table.users, table.isInGame, table.playerStates ) }
 
     static async fromJSON(json) {
         const { users } = json
@@ -9,12 +9,12 @@ export default class Table {
         return new Table ( null, undefined, users, false, undefined )
     }
 
-    constructor( id, rounds, users, isInGame, playerState ) {
+    constructor( id, rounds, users, isInGame, playerStates ) {
         this.id = id,
         this.rounds = rounds
         this.users = users
         this.isInGame = isInGame
-        this.playerState = playerState
+        this.playerStates = playerStates
     }
 
     toJSON() {
@@ -24,7 +24,7 @@ export default class Table {
                 rounds: this.rounds,
                 users: this.users,
                 isInGame: this.isInGame,
-                playerState: this.playerState
+                playerStates: this.playerStates
             }
         }
     }
@@ -34,12 +34,15 @@ export default class Table {
             data: { 
                 rounds: this.rounds,
                 users: {
-                    connect: { id: this.users[0].id }
+                    connect: { id: this.users[0].id },
                 },
                 isInGame: this.isInGame,
-                playerState: this.playerState
+                playerStates: this.playerStates
             },
-            include: { users: true },
+            include: { users: {
+                playerStates: true 
+            },
+        },
         })
 
         return Table.fromDb(createdTable)

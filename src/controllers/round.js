@@ -19,3 +19,23 @@ export const getRoundById = async (req, res) => {
 
     return sendDataResponse(res, 200, { foundRound })
 }
+
+export const updateRoundById = async (req, res) => {
+    const roundToFindId = Number(req.params.id)
+    const {numberOfCards: numberOfCards, currentTrick: currentTrick, trumps: trumps} = req.body
+
+    const roundToUpdate = await Round.findById(roundToFindId)
+
+
+    if (!roundToUpdate) {
+        return sendMessageResponse(res, 400, { message: 'Round does not exist' })
+    }
+
+    roundToUpdate.numberCards = numberOfCards
+    roundToUpdate.currentTrick = currentTrick
+    roundToUpdate.trumps = trumps
+
+    const updatedRound = await roundToUpdate.update()
+
+    return sendDataResponse(res, 200,{round: {...updatedRound, currentTrick: currentTrick, trumps: trumps}})
+}

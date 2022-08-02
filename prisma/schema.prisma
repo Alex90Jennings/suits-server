@@ -25,14 +25,14 @@ model PlayerState {
 }
 
 model User {
-  id          Int           @id @default(autoincrement())
-  username    String        @db.VarChar(12)
-  isHost      Boolean       @default(false)
-  table       Table?        @relation(fields: [tableId], references: [id])
-  tableId     Int?
-  playerState PlayerState[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt
+  id           Int           @id @default(autoincrement())
+  username     String        @db.VarChar(12)
+  isHost       Boolean       @default(false)
+  table        Table?        @relation(fields: [tableId], references: [id])
+  tableId      Int?
+  playerStates PlayerState[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now()) @updatedAt
 }
 
 model Table {

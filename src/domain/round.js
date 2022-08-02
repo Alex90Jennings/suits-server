@@ -59,4 +59,18 @@ export default class Round {
 
         return null
     }
+    
+    async update() {
+        const updatedRound = await dbClient.round.update({
+          where: {
+            id: Number(this.id)
+          },
+          data: {
+            numberCards: this.numberCards,
+            currentTrick: this.currentTrick,
+            trumps: this.trumps,
+          }
+        })
+        return Round.fromDb(updatedRound)
+      }
 }

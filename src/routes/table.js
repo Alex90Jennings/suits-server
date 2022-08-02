@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
 import { createTable, getTableById, updateTableById } from '../controllers/table.js'
-import { createRound, getRoundById } from '../controllers/round.js'
+import { createRound, getRoundById, updateRoundById } from '../controllers/round.js'
 
 const router = Router()
 
@@ -10,5 +10,6 @@ router.get('/:id', getTableById)
 router.patch('/:id', updateTableById)
 router.post('/:id/round', createRound)
 router.get('/round/:id', getRoundById)
+router.patch('/round/:id', updateRoundById)
 
 export default router
