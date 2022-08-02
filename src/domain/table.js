@@ -32,18 +32,26 @@ export default class Table {
     async save() {
          const createdTable = await dbClient.table.create({
             data: { 
-                rounds: this.rounds,
+                rounds: {
+                    create: { numberCards: 8, trumps: "S" }
+                },
                 users: {
                     connect: { id: this.users[0].id },
                 },
                 isInGame: this.isInGame,
                 playerStates: this.playerStates
             },
-            include: { users: {
-                playerStates: true 
+            include: { 
+                users: {
+                    include: {
+                        playerStates: true 
+                    },
+                },
+                rounds: true
             },
-        },
         })
+
+        console.log(createdTable)
 
         return Table.fromDb(createdTable)
     }
@@ -54,10 +62,18 @@ export default class Table {
 
     static async _findByUnique(key, value) {
         const foundTable = await dbClient.table.findUnique({
-        where: { [key]: value }
-        })
+        where: { [key]: value },
+        include: { 
+            users: {
+                include: {
+                    playerStates: true 
+                },
+            },
+            rounds: true
+        }})
 
         if (foundTable) {
+        console.log(foundTable)
         return Table.fromDb(foundTable)
         }
 
