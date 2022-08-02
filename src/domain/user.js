@@ -95,7 +95,6 @@ export default class User {
         isHost: this.isHost,
         hostTable: this.hostTable,
         tableId: this.tableId,
-        playerStates: this.playerStates
       }
     })
     return User.fromDb(updatedUser)

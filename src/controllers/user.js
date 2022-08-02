@@ -33,19 +33,11 @@ export const getAllUserByTableId = async (req, res) => {
 
 export const updateUserById = async (req, res) => {
     const userToFindId = Number(req.params.id)
-    let {tableId: tableId, isHost: isHost, playerStateId: playerStateId} = req.body
+    let {tableId: tableId, isHost: isHost} = req.body
     tableId = Number(tableId)
-    playerStateId = Number(playerStateId)
 
     const userToUpdate = await User.findById(userToFindId)
     const foundTable = await Table.findById(tableId)
-
-    if(playerStateId) {
-        const foundPlayerState = await PlayerState.findById(playerStateId)
-        if (!foundPlayerState) {
-            return sendMessageResponse(res, 400, { message: 'Player state does not exist' })
-        }
-    }
 
     if (!userToUpdate) {
         return sendMessageResponse(res, 400, { message: 'User does not exist' })
@@ -64,7 +56,9 @@ export const updateUserById = async (req, res) => {
     }
 
     userToUpdate.tableId = tableId
+    userToUpdate.isHost = isHost
+
     const updatedUser = await userToUpdate.update()
 
-    return sendDataResponse(res, 200,{user: {...updatedUser, tableId: tableId, isHost: isHost, playerStateId: playerStateId}})
+    return sendDataResponse(res, 200,{user: {...updatedUser, tableId: tableId, isHost: isHost}})
 }
