@@ -31,9 +31,9 @@ export const getAllUserByTableId = async (req, res) => {
     return sendDataResponse(res, 200, { foundUsers })
 }
 
-export const updateById = async (req, res) => {
+export const updateUserById = async (req, res) => {
     const userToFindId = Number(req.params.id)
-    let {tableId: tableId, isHost: isHost, score: score, playerStateId: playerStateId} = req.body
+    let {tableId: tableId, isHost: isHost, playerStateId: playerStateId} = req.body
     tableId = Number(tableId)
     playerStateId = Number(playerStateId)
 
@@ -47,7 +47,6 @@ export const updateById = async (req, res) => {
         }
     }
 
-
     if (!userToUpdate) {
         return sendMessageResponse(res, 400, { message: 'User does not exist' })
     }
@@ -56,8 +55,16 @@ export const updateById = async (req, res) => {
         return sendMessageResponse(res, 400, { message: 'Table does not exist' })
     }
 
+    if (foundTable.isInGame === true) {
+        return sendMessageResponse(res, 400, { message: 'Game has already started' })
+    }
+
+    if (foundTable.users.length > 5 ) {
+        return sendMessageResponse(res, 400, { message: 'Lobby is full' })
+    }
+
     userToUpdate.tableId = tableId
     const updatedUser = await userToUpdate.update()
 
-    return sendDataResponse(res, 200,{user: {...updatedUser, tableId: tableId, isHost: isHost, score: score, playerStateId: playerStateId}})
+    return sendDataResponse(res, 200,{user: {...updatedUser, tableId: tableId, isHost: isHost, playerStateId: playerStateId}})
 }

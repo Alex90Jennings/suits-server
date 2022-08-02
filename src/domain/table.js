@@ -60,4 +60,16 @@ export default class Table {
 
         return null
     }
+
+    async update() {
+        const updatedTable = await dbClient.table.update({
+          where: {
+            id: Number(this.id)
+          },
+          data: {
+            isInGame: this.isInGame,
+          }
+        })
+        return Table.fromDb(updatedTable)
+      }
 }

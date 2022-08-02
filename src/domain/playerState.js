@@ -1,15 +1,15 @@
 import dbClient from '../utils/dbClient.js'
 
 export default class PlayerState {
-    static fromDb(playerState) { return new PlayerState( playerState.id, playerState.user, playerState.score, playerState.bet, playerState.round, playerState.hand, playerState.playedCard, playerState.handsWon ) }
+    static fromDb(playerState) { return new PlayerState( playerState.id, playerState.user, playerState.score, playerState.bet, playerState.round, playerState.hand, playerState.playedCard, playerState.playsNext, playerState.handsWon ) }
 
     static async fromJSON(json, userId) {
         const { roundId } = json
 
-        return new PlayerState ( null, userId, 0, 0, roundId, undefined, undefined, 0 )
+        return new PlayerState ( null, userId, 0, 0, roundId, undefined, undefined, false, 0 )
     }
 
-    constructor( id, user, score, bet, round, hand, playedCard, handsWon ) {
+    constructor( id, user, score, bet, round, hand, playedCard, playsNext, handsWon ) {
         this.id = id,
         this.user = user
         this.score = score
@@ -17,6 +17,7 @@ export default class PlayerState {
         this.round = round
         this.hand = hand
         this.playedCard = playedCard
+        this.playsNext = playsNext
         this.handsWon = handsWon
     }
 
@@ -30,6 +31,7 @@ export default class PlayerState {
                 round: this.round,
                 hand: this.hand,
                 playedCard: this.playedCard,
+                playsNext: this.playsNext,
                 handsWon: this.handsWon
             }
         }
@@ -48,6 +50,7 @@ export default class PlayerState {
                 },
                 hand: this.hand,
                 playedCard: this.playedCard,
+                playsNext: this.playsNext,
                 handsWon: this.handsWon
             },
             include: { user: true, round: true },
@@ -84,4 +87,20 @@ export default class PlayerState {
     
         return foundPlayerStates.map((playerState) => PlayerState.fromDb(playerState))
     }
+
+    async update() {
+        const updatedPlayerState = await dbClient.playerState.update({
+          where: {
+            id: Number(this.id)
+          },
+          data: {
+            score: this.score,
+            bet: this.bet,
+            hand: this.hand,
+            playsNext: this.playsNext,
+            handsWon: this.handsWon,
+          }
+        })
+        return PlayerState.fromDb(updatedPlayerState)
+      }
 }
