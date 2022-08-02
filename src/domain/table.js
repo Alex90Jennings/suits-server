@@ -51,8 +51,6 @@ export default class Table {
             },
         })
 
-        console.log(createdTable)
-
         return Table.fromDb(createdTable)
     }
 
@@ -73,7 +71,6 @@ export default class Table {
         }})
 
         if (foundTable) {
-        console.log(foundTable)
         return Table.fromDb(foundTable)
         }
 
