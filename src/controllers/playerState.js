@@ -20,6 +20,16 @@ export const getPlayerStatesByUserId = async (req, res) => {
     return sendDataResponse(res, 200, { foundPlayerStates })
 }
 
+export const getPlayerStatesById = async (req, res) => {
+    const playerStateId = Number(req.params.id)
+
+    const foundPlayerState = await PlayerState.findById(playerStateId)
+
+    if(!foundPlayerState) return sendMessageResponse(res, 500, 'unable to find user')
+
+    return sendDataResponse(res, 200, { foundPlayerState })
+}
+
 export const updatePlayerStateById = async (req, res) => {
     const playerStateToUpdateId = Number(req.params.id)
     const {score: score, bet: bet, hand: hand, playedCard: playedCard, playsNext: playsNext, handsWon: handsWon} = req.body
