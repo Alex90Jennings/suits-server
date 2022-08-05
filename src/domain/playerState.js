@@ -75,6 +75,7 @@ export default class PlayerState {
     }
 
     static async findManyByUser(userId) {
+
         return PlayerState._findMany({ key: 'userId', value: userId })
     }
     
@@ -97,8 +98,9 @@ export default class PlayerState {
             score: this.score,
             bet: this.bet,
             hand: this.hand,
+            playedCard: this.playedCard,
             playsNext: this.playsNext,
-            handsWon: this.handsWon,
+            handsWon: this.handsWon
           }
         })
         return PlayerState.fromDb(updatedPlayerState)
