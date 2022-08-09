@@ -84,7 +84,15 @@ export default class Table {
           },
           data: {
             isInGame: this.isInGame,
-          }
+          },
+          include: { 
+              users: {
+                  include: {
+                      playerStates: true 
+                  },
+              },
+              rounds: true
+          },
         })
         return Table.fromDb(updatedTable)
       }
