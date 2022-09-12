@@ -25,6 +25,9 @@
     "type": "git",
     "url": "git+https://github.com/Alex90Jennings/suits-server.git"
   },
+  "engines": {
+    "node": "16.14.2"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
